@@ -45,7 +45,7 @@ type MenuItem struct {
 type Order struct {
 	ID           string      `json:"id" bson:"_id,omitempty"`
 	UserID       string      `json:"user_id" bson:"user_id"`
-	RiderID      string      `json:"rider_id" bson:"rider_id"`
+	RiderID      string      `json:"rider_id" bson:"rider_id"` // assuming this field will be updated after rider is assigned
 	Items        []OrderItem `json:"items" bson:"items"`
 	TotalPrice   float64     `json:"total_price" bson:"total_price"`
 	Status       string      `json:"status" bson:"status"`

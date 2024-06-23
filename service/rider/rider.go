@@ -58,7 +58,6 @@ func (r *riderService) GetRiderOrderHistory(c echo.Context, riderId string) ([]m
 
 	filter := bson.M{
 		"rider_id": riderId,
-		"status":   "completed",
 	}
 
 	collection := r.mongoClient.Database("test").Collection("orders")
