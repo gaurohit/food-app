@@ -41,7 +41,7 @@ func (u *userEndpoint) Register(c echo.Context) error {
 	errRegister := u.userService.Resgister(c, user)
 	if errRegister != nil {
 		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: errRegister.Message})
-		return c.JSON(http.StatusBadRequest, utils.GenericResponse{Message: errRegister.Message})
+		return c.JSON(errRegister.Code, utils.GenericResponse{Message: errRegister.Message})
 	}
 
 	return c.JSON(http.StatusCreated, utils.GenericResponse{Message: "user registered successfully"})

@@ -82,14 +82,14 @@ func (u *restaurantService) AcceptOrder(c echo.Context, orderDetails requestresp
 
 	restaurant, err := model.GetRestaurant(c, orderDetails.RestaurantID, *collection)
 
+	if err != nil {
+		return &utils.ErrorHandler{Message: err.Message, DevMessage: err.DevMessage}
+	}
+
 	prices := make(map[string]float64)
 
 	for _, v := range restaurant.Menu {
 		prices[v.ID] = v.Price
-	}
-
-	if err != nil {
-		return &utils.ErrorHandler{Message: err.Message, DevMessage: err.DevMessage}
 	}
 
 	order := new(model.Order)

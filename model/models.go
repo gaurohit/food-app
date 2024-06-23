@@ -15,7 +15,7 @@ func Register(c echo.Context, request interface{}, collection mongo.Collection) 
 
 	_, err := collection.InsertOne(c.Request().Context(), &request)
 	if err != nil {
-		return &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error()}
+		return &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error(),Code:400}
 	}
 
 	return nil
@@ -29,9 +29,9 @@ func UpdateRiderLocation(c echo.Context, location Location, collection mongo.Col
 	result := collection.FindOneAndUpdate(c.Request().Context(), filter, update)
 	if result.Err() != nil {
 		if result.Err() == mongo.ErrNoDocuments {
-			return &utils.ErrorHandler{Message: utils.DATA_NOT_FOUND, DevMessage: result.Err().Error()}
+			return &utils.ErrorHandler{Message: utils.DATA_NOT_FOUND, DevMessage: result.Err().Error(),Code:404}
 		}
-		return &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: result.Err().Error()}
+		return &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: result.Err().Error(),Code:400}
 	}
 
 	return nil
@@ -87,6 +87,10 @@ func SuggestRestaurant(c echo.Context, preferences UserPreferences, collection m
 		return nil, &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error(), Code: 400}
 	}
 
+	if len(*restaurants) == 0 {
+		return nil, &utils.ErrorHandler{Message: utils.DATA_NOT_FOUND, Code: 404}
+	}
+
 	return restaurants, nil
 }
 
@@ -94,13 +98,17 @@ func GetRestaurant(c echo.Context, restaurantId string, collection mongo.Collect
 
 	filter := bson.M{"_id": restaurantId}
 
-	var restaurant Restaurant
+	restaurant :=  new(Restaurant)
 	err := collection.FindOne(c.Request().Context(), filter).Decode(&restaurant)
 	if err != nil {
 		return nil, &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error(), Code: 400}
 	}
 
-	return &restaurant, nil
+	if restaurant == nil{
+		return nil, &utils.ErrorHandler{Message: utils.DATA_NOT_FOUND, Code: 404}
+	}
+
+	return restaurant, nil
 }
 
 func GetUser(c echo.Context, filter primitive.M, Client mongo.Client) (*User, *utils.ErrorHandler) {
@@ -114,12 +122,16 @@ func GetUser(c echo.Context, filter primitive.M, Client mongo.Client) (*User, *u
 		return nil, &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error(), Code: 400}
 	}
 
+	if user == nil{
+		return nil, &utils.ErrorHandler{Message: utils.DATA_NOT_FOUND, Code: 404}
+	}
+
 	return user, nil
 }
 
 func AcceptOrder(c echo.Context, orderDetails Order, collection mongo.Collection) *utils.ErrorHandler {
 
-		_, err := collection.InsertOne(context.TODO(), orderDetails)
+		_, err := collection.InsertOne(c.Request().Context(), orderDetails)
 	if err != nil {
 		return &utils.ErrorHandler{Message: utils.SOMETHING_WENT_WRONG, DevMessage: err.Error(), Code: 400}
 	}

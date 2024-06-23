@@ -41,7 +41,7 @@ func (r *riderEndpoint) RegisterRider(c echo.Context) error {
 	errRegister := r.riderService.ResgisterRider(c, rider)
 	if errRegister != nil {
 		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: errRegister.Message})
-		return c.JSON(http.StatusBadRequest, utils.GenericResponse{Message: errRegister.Message})
+		return c.JSON(errRegister.Code, utils.GenericResponse{Message: errRegister.Message})
 	}
 
 	return c.JSON(http.StatusCreated, utils.GenericResponse{Message: "Rider registered successfully"})
@@ -62,10 +62,10 @@ func (r *riderEndpoint) UpdateRiderLocation(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, &utils.GenericResponse{Message: validationError.Message})
 	}
 
-	errRegister := r.riderService.UpdateRiderLocation(c, *updateLoaction, riderId)
-	if errRegister != nil {
-		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: errRegister.Message})
-		return c.JSON(http.StatusBadRequest, utils.GenericResponse{Message: errRegister.Message})
+	err := r.riderService.UpdateRiderLocation(c, *updateLoaction, riderId)
+	if err != nil {
+		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: err.Message})
+		return c.JSON(err.Code, utils.GenericResponse{Message: err.Message})
 	}
 
 	return c.JSON(http.StatusOK, utils.GenericResponse{Message: "Rider registered successfully"})
@@ -74,10 +74,10 @@ func (r *riderEndpoint) UpdateRiderLocation(c echo.Context) error {
 
 func (r *riderEndpoint) GetRiderOrderHistory(c echo.Context) error {
 	riderId := c.Param("id")
-	response, errRegister := r.riderService.GetRiderOrderHistory(c, riderId)
-	if errRegister != nil {
-		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: errRegister.Message})
-		return c.JSON(errRegister.Code, utils.GenericResponse{Message: errRegister.Message})
+	response, err := r.riderService.GetRiderOrderHistory(c, riderId)
+	if err != nil {
+		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: err.Message})
+		return c.JSON(err.Code, utils.GenericResponse{Message: err.Message})
 	}
 
 	return c.JSON(http.StatusOK, response)
@@ -85,10 +85,10 @@ func (r *riderEndpoint) GetRiderOrderHistory(c echo.Context) error {
 
 func (r *riderEndpoint) NearestRider(c echo.Context) error {
 	restaurantId := c.Param("id")
-	response, errRegister := r.riderService.NearestRider(c, restaurantId)
-	if errRegister != nil {
+	response, err := r.riderService.NearestRider(c, restaurantId)
+	if err != nil {
 		log.Println(c.Request().RequestURI, &utils.GenericResponse{Message: errRegister.Message})
-		return c.JSON(errRegister.Code, utils.GenericResponse{Message: errRegister.Message})
+		return c.JSON(err.Code, utils.GenericResponse{Message: err.Message})
 	}
 
 	return c.JSON(http.StatusOK, response)
