@@ -177,7 +177,7 @@ func NearestRider(c echo.Context, points Location, collection *mongo.Collection)
 		},
 	}
 
-	err := collection.FindOne(context.TODO(), filter, options.FindOne().SetSort(bson.M{
+	err := collection.FindOne(c.Request().Context(), filter, options.FindOne().SetSort(bson.M{
 		"location": bson.M{
 			"$meta": "textScore",
 		},
