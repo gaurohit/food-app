@@ -103,6 +103,7 @@ func (u *restaurantService) AcceptOrder(c echo.Context, orderDetails requestresp
 	order.ID = uuid.NewString()
 	order.Items = orderDetails.Items
 	order.UserID = user.ID
+	order.restaurantId = restaurant.ID
 	order.Status = "Pending"
 	order.TotalPrice = totalPrices
 	order.Createdat = time.Now()
