@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  api-gateway:
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./config/.env
+    networks:
+      default:
+        ipv4_address: 10.0.0.21
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+        

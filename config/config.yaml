@@ -1,0 +1,25 @@
+service:
+  name: "app"
+  port: "8083"
+  env: "stag"
+  allow_origins: "http://localhost:3000"
+
+zap:
+  level: "info"
+
+mongodb:
+  database: "staging-auth"
+  database_uri: "mongodb+srv://gaurohit:rohit11@cluster0.hw6rx.mongodb.net/"
+
+
+
+jwt_secret:
+  key : "3fb50b83-f2ec-413d-84e3-fe15c327593f"
+  
+
+
+rate_limiter:
+  epifi_v1:
+    key: "epifi_v1"
+    interval: 200
+
