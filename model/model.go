@@ -31,7 +31,6 @@ type Restaurant struct {
 	Menu     []MenuItem `json:"menu" bson:"menu" validate:"required"`
 	Rating   float64    `json:"rating" bson:"rating"`
 	Location Location   `json:"location" bson:"location" validate:"required"`
-	Orders   []Order    `json:"orders" bson:"orders"`
 }
 
 type MenuItem struct {
