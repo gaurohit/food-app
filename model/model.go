@@ -16,7 +16,6 @@ type Rider struct {
 	PhoneNumber string   `json:"phone_number" bson:"phone_number" validate:"required"`
 	VehicleType string   `json:"vehicle_type" bson:"vehicle_type" validate:"required"`
 	Location    Location `json:"location" bson:"location" validate:"required"`
-	Orders      []Order  `json:"orders" bson:"orders"`
 }
 
 type Location struct {
