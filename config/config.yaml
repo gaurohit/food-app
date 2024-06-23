@@ -8,8 +8,8 @@ zap:
   level: "info"
 
 mongodb:
-  database: "staging-auth"
-  database_uri: "mongodb+srv://gaurohit:rohit11@cluster0.hw6rx.mongodb.net/"
+  database: "test"
+  database_uri: ""
 
 
 
